@@ -1,5 +1,5 @@
 {
-  "pluginAlias": "ExampleHomebridgePlugin",
+  "pluginAlias": "Esp8266GarageDoorController",
   "pluginType": "platform",
   "singular": true,
   "schema": {
@@ -9,7 +9,14 @@
         "title": "Name",
         "type": "string",
         "required": true,
-        "default": "Example Dynamic Platform"
+        "default": "Garage Door"
+      },
+      "contactTime": {
+        "title": "Contact Time (ms)",
+        "description": "The time in ms that the relay should contact to trigger the garage event",
+        "type": "number",
+        "required": true,
+        "default": 1000
       }
     }
   }

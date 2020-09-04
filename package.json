@@ -1,16 +1,14 @@
 {
-  "private": true,
-  "displayName": "Plugin Name",
-  "name": "homebridge-plugin-name",
-  "version": "1.0.0",
-  "description": "A short description about what your plugin does.",
+  "name": "homebridge-esp8266-garage-door",
+  "version": "0.0.1",
+  "description": "A Homebridge plugin for a esp8266 based garage door controller.",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git://github.com/USERNAME/GITHUB_PROJECT_NAME.git"
+    "url": "git://github.com/oznu/homebridge-esp8266-garage-door.git"
   },
   "bugs": {
-    "url": "https://github.com/USERNAME/GITHUB_PROJECT_NAME/issues"
+    "url": "https://github.com/oznu/homebridge-esp8266-garage-door/issues"
   },
   "engines": {
     "node": ">=10.17.0",
@@ -26,7 +24,10 @@
   "keywords": [
     "homebridge-plugin"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "@oznu/ws-connect": "^2.0.0",
+    "bonjour": "^3.5.0"
+  },
   "devDependencies": {
     "@types/node": "^14.6.3",
     "@typescript-eslint/eslint-plugin": "^4.0.1",
