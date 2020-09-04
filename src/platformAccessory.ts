@@ -11,7 +11,6 @@ interface StatusPayload {
 
 export class HomebridgeEsp8266GarageAccessory {
   private service: Service;
-
   private socket: WebSocket;
 
   constructor(
