@@ -6,4 +6,4 @@ export const PLATFORM_NAME = 'Esp8266GarageDoorController';
 /**
  * This must match the name of your plugin as defined the package.json
  */
-export const PLUGIN_NAME = 'homebridge-esp8266-garage-door';
+export const PLUGIN_NAME = '@oznu/homebridge-esp8266-garage-door';
