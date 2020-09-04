@@ -13,7 +13,7 @@
       },
       "contactTime": {
         "title": "Contact Time (ms)",
-        "description": "The time in ms that the relay should contact to trigger the garage event",
+        "description": "The time in ms that the relay should contact to trigger the garage contacts for.",
         "type": "number",
         "required": true,
         "default": 1000

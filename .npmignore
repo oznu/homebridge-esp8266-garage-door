@@ -1,6 +1,8 @@
 # Ignore source code
 src
 .arduino-output
+sketch
+.github
 
 # ------------- Defaults ------------- #
 
