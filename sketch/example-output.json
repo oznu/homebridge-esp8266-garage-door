@@ -1,0 +1,5 @@
+{
+  "TargetDoorState": "OPEN|CLOSED",
+  "CurrentDoorState": "OPEN|CLOSED|OPENING|CLOSING|STOPPED",
+  "ObstructionDetected": false
+}
