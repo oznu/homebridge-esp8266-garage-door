@@ -3,7 +3,7 @@
 #include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
 
-#include <WiFiManager.h>
+#include <WiFiManager.h>       // circa September 2019 development branch - https://github.com/tzapu/WiFiManager.git
 
 #include "settings.h"
 #include "GarageDoor.h"

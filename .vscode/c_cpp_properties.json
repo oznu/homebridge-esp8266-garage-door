@@ -5,7 +5,9 @@
             "includePath": [
                 "${env:HOME}/Documents/Arduino/libraries",
                 "${env:HOME}/Library/Arduino15/packages/esp8266/hardware/esp8266/2.7.4/**",
-                "${env:HOME}/Library/Arduino15/packages/esp8266/tools/**"
+                "${env:HOME}/Library/Arduino15/packages/esp8266/tools/**",
+                "/Users/john/Library/Arduino15/packages/esp8266/hardware/esp8266/2.7.4/**",
+                "/Users/john/Library/Arduino15/packages/esp8266/tools/**"
             ],
             "forcedInclude": [],
             "macFrameworkPath": [
