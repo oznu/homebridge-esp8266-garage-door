@@ -1,0 +1,2 @@
+#define SOCKET_AUTH_USERNAME          "username"
+#define SOCKET_AUTH_PASSWORD          "password"

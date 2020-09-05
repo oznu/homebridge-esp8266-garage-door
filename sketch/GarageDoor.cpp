@@ -1,5 +1,5 @@
 #include <ArduinoJson.h>              // v5.13.2 - https://github.com/bblanchon/ArduinoJson
-#include <WebSocketsServer.h>         // v2.1.4 - https://github.com/Links2004/arduinoWebSockets
+#include <WebSocketsServer.h>         // v2.2.0 - https://github.com/Links2004/arduinoWebSockets
 #include <Bounce2.h>                  // v2.53 - https://github.com/thomasfredericks/Bounce2
 
 #include "GarageDoor.h"
@@ -25,9 +25,9 @@ void GarageDoor::begin() {
   openReedSwitch.attach(OPEN_REED_SWITCH, INPUT);
   openReedSwitch.interval(250);
 
-  // start the web socket
-  webSocket.begin();
+  webSocket.setAuthorization(SOCKET_AUTH_USERNAME, SOCKET_AUTH_PASSWORD);
   webSocket.onEvent(std::bind(&GarageDoor::webSocketEvent, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+  webSocket.begin();
 
   // get the initial reed switch state
   if ( openReedSwitch.isPressed() ) {

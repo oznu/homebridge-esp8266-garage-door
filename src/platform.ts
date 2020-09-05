@@ -5,6 +5,8 @@ import { PLATFORM_NAME, PLUGIN_NAME } from './settings';
 import { HomebridgeEsp8266GarageAccessory } from './platformAccessory';
 
 interface HomebridgeEsp8266GarageConfig extends PlatformConfig {
+  username?: string;
+  password?: string;
   contactTime?: number;
 }
 
@@ -20,6 +22,11 @@ export class HomebridgeEsp8266GaragePlatform implements DynamicPlatformPlugin {
     public readonly config: HomebridgeEsp8266GarageConfig,
     public readonly api: API,
   ) {
+    if (!config.username || !config.password) {
+      this.log.error('Username and password must be defined.');
+      return;
+    }
+
     this.api.on('didFinishLaunching', () => {
       // run the method to discover / register your devices as accessories
       this.discoverDevices();

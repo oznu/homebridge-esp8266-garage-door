@@ -19,7 +19,7 @@ export class HomebridgeEsp8266GarageAccessory {
     private readonly config: { host: string, port: number, name: string, serial: string },
   ) {
 
-    this.socket = new WebSocket(`ws://${this.config.host}:${this.config.port}`, {
+    this.socket = new WebSocket(`ws://${this.platform.config.username}:${this.platform.config.password}@${this.config.host}:${this.config.port}`, {
       options: {
         handshakeTimeout: 10000,
       },

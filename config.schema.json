@@ -11,6 +11,16 @@
         "required": true,
         "default": "Garage Door"
       },
+      "username": {
+        "title": "Device Username",
+        "type": "string",
+        "required": true
+      },
+      "password": {
+        "title": "Device Password",
+        "type": "string",
+        "required": true
+      },
       "contactTime": {
         "title": "Contact Time (ms)",
         "description": "The time in ms that the relay should contact to trigger the garage contacts for.",
