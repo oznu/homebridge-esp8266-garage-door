@@ -15,6 +15,7 @@ class GarageDoor {
 
     Button openReedSwitch = Button();
     Button closedReedSwitch = Button();
+    Button obstructionDetectedSwitch = Button();
 
     GarageDoor(void);
 

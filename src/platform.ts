@@ -8,6 +8,7 @@ interface HomebridgeEsp8266GarageConfig extends PlatformConfig {
   username?: string;
   password?: string;
   contactTime?: number;
+  reverseObstructionSensor?: boolean;
 }
 
 export class HomebridgeEsp8266GaragePlatform implements DynamicPlatformPlugin {

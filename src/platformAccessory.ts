@@ -29,6 +29,12 @@ export class HomebridgeEsp8266GarageAccessory {
       this.platform.log.info(msg);
     });
 
+    this.socket.on('open', () => {
+      this.socket.sendJson({
+        reverseObstructionSensor: this.platform.config.reverseObstructionSensor || false,
+      });
+    });
+
     this.socket.on('json', this.parseStatus.bind(this));
 
     // set accessory information
@@ -60,6 +66,11 @@ export class HomebridgeEsp8266GarageAccessory {
     const targetDoorState = this.platform.Characteristic.TargetDoorState[payload.TargetDoorState];
     if (targetDoorState !== undefined) {
       this.service.updateCharacteristic(this.platform.Characteristic.TargetDoorState, targetDoorState);
+    }
+
+    // set the ObstructionDetected characteristic
+    if (typeof payload.ObstructionDetected === 'boolean') {
+      this.service.updateCharacteristic(this.platform.Characteristic.ObstructionDetected, payload.ObstructionDetected);
     }
   }
 

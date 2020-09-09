@@ -2,19 +2,29 @@
 #include <DNSServer.h>
 #include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
+#include <ESP8266WebServer.h>
+#include <ESP8266HTTPUpdateServer.h>
 
 #include <WiFiManager.h>       // circa September 2019 development branch - https://github.com/tzapu/WiFiManager.git
 
+#include "auth.h"
 #include "settings.h"
 #include "GarageDoor.h"
+#include "html.h"
 
 GarageDoor garageDoor;
+ESP8266WebServer httpServer(80);
+ESP8266HTTPUpdateServer httpUpdater;
 
 // parameters
 char device_name[40];
 char hostname[18];
 bool resetRequired = false;
 unsigned long loopLastRun;
+
+const char* update_path = "/firmware";
+const char* update_username = AUTH_USERNAME;
+const char* update_password = AUTH_PASSWORD;
 
 void saveConfigCallback() {
   Serial.println("Resetting device...");
@@ -85,13 +95,27 @@ void setup(void) {
   // MDNS end
 
   // garage door start
-  garageDoor.begin();         
+  garageDoor.begin();
+
+  // start http update server
+  httpUpdater.setup(&httpServer, update_path, update_username, update_password);
+
+  httpServer.on("/", []() {
+    if (!httpServer.authenticate(update_username, update_password)) {
+      return httpServer.requestAuthentication();
+    }
+    String s = MAIN_page;
+    httpServer.send(200, "text/html", s);
+  });
+
+  httpServer.begin();
 
   // turn LED off once ready
   digitalWrite(LED_BUILTIN, HIGH);     
 }
 
 void loop (void) {
+  httpServer.handleClient();
   garageDoor.loop();
   MDNS.update();
 }

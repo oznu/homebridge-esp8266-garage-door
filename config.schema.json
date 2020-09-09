@@ -27,6 +27,11 @@
         "type": "number",
         "required": true,
         "default": 1000
+      },
+      "reverseObstructionSensor": {
+        "title": "Reverse Obstruction Sensor",
+        "description": "Set the obstruction sensor to be NC instead of NO.",
+        "type": "boolean"
       }
     }
   }

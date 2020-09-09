@@ -21,11 +21,11 @@ void GarageDoor::begin() {
   closedReedSwitch.attach(CLOSED_REED_SWITCH, INPUT);
   closedReedSwitch.interval(250);
 
-  // attach the open reed switch interface
-  openReedSwitch.attach(OPEN_REED_SWITCH, INPUT);
-  openReedSwitch.interval(250);
+  // attach the obstruction sensor switch interface
+  obstructionDetectedSwitch.attach(OBSTRUCTION_DETECTED_SWITCH, INPUT);
+  obstructionDetectedSwitch.interval(250);
 
-  webSocket.setAuthorization(SOCKET_AUTH_USERNAME, SOCKET_AUTH_PASSWORD);
+  webSocket.setAuthorization(AUTH_USERNAME, AUTH_PASSWORD);
   webSocket.onEvent(std::bind(&GarageDoor::webSocketEvent, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
   webSocket.begin();
 
@@ -40,6 +40,10 @@ void GarageDoor::begin() {
     this->currentDoorState = "STOPPED"; // if it's neither up nor down, it's probably stopped
     this->targetDoorState = "OPEN";
   }
+
+  if ( obstructionDetectedSwitch.isPressed() ) {
+    this->obstructionDetected = true;
+  }
 }
 
 void GarageDoor::loop () {
@@ -48,6 +52,7 @@ void GarageDoor::loop () {
   // Update the Bounce instances
   openReedSwitch.update();
   closedReedSwitch.update();
+  obstructionDetectedSwitch.update();
 
   if ( openReedSwitch.released() ) {
     this->currentDoorState = "CLOSING";
@@ -75,6 +80,18 @@ void GarageDoor::loop () {
     this->targetDoorState = "CLOSED";
     this->broadcastSystemStatus();
     Serial.println("[CLOSED SWITCH] DOOR FULLY CLOSED");
+  }
+
+  if ( obstructionDetectedSwitch.pressed() ) {
+    this->obstructionDetected = true;
+    this->broadcastSystemStatus();
+    Serial.println("[OBSTRUCTION SWITCH] TRUE");
+  }
+
+  if ( obstructionDetectedSwitch.released() ) {
+    this->obstructionDetected = false;
+    this->broadcastSystemStatus();
+    Serial.println("[OBSTRUCTION SWITCH] FALSE");
   }
 }
 
@@ -115,7 +132,15 @@ void GarageDoor::processIncomingRequest(String payload) {
     unsigned long contactTime = req["contactTime"];
 
     if (this->currentDoorState == "OPENING" || this->currentDoorState == "CLOSING") {
-      this->currentDoorState = "STOPPED";
+      if ( closedReedSwitch.isPressed() ) {
+        this->currentDoorState = "CLOSED";
+        this->targetDoorState = "CLOSED";
+      } else if ( openReedSwitch.isPressed() ) {
+        this->currentDoorState = "OPEN";
+        this->targetDoorState = "OPEN";
+      } else {
+        this->currentDoorState = "STOPPED";
+      }
       this->broadcastSystemStatus();
       this->triggerContactRelay(contactTime);
       return;
@@ -139,6 +164,16 @@ void GarageDoor::processIncomingRequest(String payload) {
 
     this->broadcastSystemStatus();
     this->triggerContactRelay(contactTime);
+  } else if ( req.containsKey("reverseObstructionSensor") ) {
+    if ( req["reverseObstructionSensor"] == true ) {
+      Serial.println("Setting obstructionDetectedSwitch to trigger on LOW");
+      obstructionDetectedSwitch.setPressedState(LOW);
+    } else {
+      Serial.println("Setting obstructionDetectedSwitch to trigger on HIGH");
+      obstructionDetectedSwitch.setPressedState(HIGH);
+    }
+    this->obstructionDetected = obstructionDetectedSwitch.isPressed();
+    this->broadcastSystemStatus();
   }
 }
 
