@@ -28,8 +28,9 @@
     "door"
   ],
   "dependencies": {
-    "@oznu/ws-connect": "^2.0.0",
-    "bonjour": "^3.5.0"
+    "@oznu/ws-connect": "^2.2.0",
+    "bonjour": "^3.5.0",
+    "mdns-resolver": "^1.0.0"
   },
   "devDependencies": {
     "@types/node": "^14.6.3",

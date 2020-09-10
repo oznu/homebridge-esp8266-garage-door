@@ -1,5 +1,6 @@
 import { Service, PlatformAccessory, CharacteristicValue, CharacteristicSetCallback } from 'homebridge';
 import { WebSocket } from '@oznu/ws-connect';
+import { resolve4 } from 'mdns-resolver';
 
 import { HomebridgeEsp8266GaragePlatform } from './platform';
 
@@ -19,9 +20,18 @@ export class HomebridgeEsp8266GarageAccessory {
     private readonly config: { host: string, port: number, name: string, serial: string },
   ) {
 
-    this.socket = new WebSocket(`ws://${this.platform.config.username}:${this.platform.config.password}@${this.config.host}:${this.config.port}`, {
+    this.socket = new WebSocket('', {
       options: {
         handshakeTimeout: 10000,
+      },
+      beforeConnect: async () => {
+        try {
+          const hostIp = await resolve4(this.config.host);
+          const socketAddress = `ws://${this.platform.config.username}:${this.platform.config.password}@${hostIp}:${this.config.port}`;
+          this.socket.setAddresss(socketAddress);
+        } catch (e) {
+          this.platform.log.warn(e.message);
+        }
       },
     });
 
@@ -39,14 +49,13 @@ export class HomebridgeEsp8266GarageAccessory {
 
     // set accessory information
     this.accessory.getService(this.platform.Service.AccessoryInformation)!
-      .setCharacteristic(this.platform.Characteristic.Name, 'Irrigation System')
+      .setCharacteristic(this.platform.Characteristic.Name, 'Garage Door')
       .setCharacteristic(this.platform.Characteristic.Manufacturer, 'oznu-platform')
       .setCharacteristic(this.platform.Characteristic.Model, 'garage-door')
       .setCharacteristic(this.platform.Characteristic.SerialNumber, this.config.serial);
 
     // create service
     this.service = this.accessory.getService(this.platform.Service.GarageDoorOpener) || this.accessory.addService(this.platform.Service.GarageDoorOpener);
-    this.service.setCharacteristic(this.platform.Characteristic.Name, 'Garage Door');
 
     this.service.getCharacteristic(this.platform.Characteristic.TargetDoorState)
       .on('set', this.setTargetDoorState.bind(this));
@@ -75,6 +84,11 @@ export class HomebridgeEsp8266GarageAccessory {
   }
 
   setTargetDoorState(value: CharacteristicValue, callback: CharacteristicSetCallback) {
+    if (!this.socket.isConnected()) {
+      this.platform.log.error(`Garage Door Not Connected - ${this.config.host}`);
+      return callback(new Error('Garage Door Not Connected'));
+    }
+
     callback();
 
     const targetDoorState = value ? 'CLOSED' : 'OPEN';
