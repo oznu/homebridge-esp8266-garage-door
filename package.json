@@ -1,6 +1,6 @@
 {
   "name": "@oznu/homebridge-esp8266-garage-door",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A Homebridge plugin for a esp8266 based garage door controller.",
   "license": "Apache-2.0",
   "repository": {
