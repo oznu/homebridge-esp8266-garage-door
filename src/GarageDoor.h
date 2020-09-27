@@ -19,8 +19,8 @@ class GarageDoor {
 
     GarageDoor(void);
 
-    char* targetDoorState;  // OPEN | CLOSED
-    char* currentDoorState; // OPEN | CLOSED | OPENING | CLOSING | STOPPED
+    String targetDoorState;  // OPEN | CLOSED
+    String currentDoorState; // OPEN | CLOSED | OPENING | CLOSING | STOPPED
     bool obstructionDetected = false;
 
     void begin();

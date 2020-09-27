@@ -20,12 +20,15 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Install dependencies
+        working-directory: ./homebridge
         run: npm install
 
       - name: Lint the project
+        working-directory: ./homebridge
         run: npm run lint
 
       - name: Build the project
+        working-directory: ./homebridge
         run: npm run build
         env:
           CI: true

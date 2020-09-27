@@ -1,6 +1,9 @@
 # Ignore compiled code
-dist
+homebridge/dist
 .arduino-output
+.pio
+.vscode/c_cpp_properties.json
+.vscode/launch.json
 
 # ------------- Defaults ------------- #
 

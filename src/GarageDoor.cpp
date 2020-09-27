@@ -154,10 +154,14 @@ void GarageDoor::processIncomingRequest(String payload) {
         this->targetDoorState = "OPEN";
         this->currentDoorState = "OPENING";
       }
-    } else if ( req["TargetDoorState"] == "OPEN" ) {
+    }
+    else if (req["TargetDoorState"] == "OPEN")
+    {
       this->targetDoorState = "OPEN";
       this->currentDoorState = "OPENING";
-    } else if ( req["TargetDoorState"] == "CLOSED" ) {
+    }
+    else if (req["TargetDoorState"] == "CLOSED")
+    {
       this->targetDoorState = "CLOSED";
       this->currentDoorState = "CLOSING";
     }
