@@ -125,8 +125,9 @@ void GarageDoor::webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, s
 }
 
 void GarageDoor::processIncomingRequest(String payload) {
-  DynamicJsonBuffer jsonBuffer;
-  JsonObject& req = jsonBuffer.parseObject(payload);
+  DynamicJsonDocument doc(512);
+  deserializeJson(doc, payload);
+  JsonObject req = doc.as<JsonObject>();
 
   if ( req.containsKey("TargetDoorState") ) {
     unsigned long contactTime = req["contactTime"];
@@ -191,16 +192,14 @@ void GarageDoor::triggerContactRelay(unsigned long contactTime) {
 
 // broadcasts the status for everything
 void GarageDoor::broadcastSystemStatus() {
-  DynamicJsonBuffer jsonBuffer;
-  JsonObject& res = jsonBuffer.createObject();
+  DynamicJsonDocument doc(512);
+  JsonObject res = doc.to<JsonObject>();
 
   res["CurrentDoorState"] = this->currentDoorState;
   res["TargetDoorState"] = this->targetDoorState;
   res["ObstructionDetected"] = this->obstructionDetected || false;
 
   String payload;
-  res.printTo(payload);
+  serializeJson(doc, payload);
   webSocket.broadcastTXT(payload);
 }
-
-
