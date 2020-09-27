@@ -17,4 +17,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install platformio
       - name: Run PlatformIO
-        run: platformio run -e d1_mini
+        run: |
+          cp src/auth.h-template src/auth.h
+          platformio run -e d1_mini
