@@ -29,3 +29,42 @@ You may need to adjust the `upload_port` and `monitor_port` in the [`platformio.
 ```
 pio device list
 ```
+
+## Homebridge Plugin
+
+The Homebridge plugin is located in the [`./homebridge`](./homebridge) directory.
+
+```
+cd homebridge
+```
+
+### Build
+
+TypeScript needs to be compiled into JavaScript before it can run. The following command will compile the contents of your [`src`](./src) directory and put the resulting code into the `dist` folder.
+
+```
+npm run build
+```
+
+
+### Link To Homebridge
+
+Run this command so your global install of Homebridge can discover the plugin in your development environment:
+
+```
+npm link
+```
+
+You can now start Homebridge, use the `-D` flag so you can see debug log messages in your plugin:
+
+```
+homebridge -D
+```
+
+### Watch For Changes and Build Automatically
+
+If you want to have your code compile automatically as you make changes, and restart Homebridge automatically between changes you can run:
+
+```
+npm run watch
+```

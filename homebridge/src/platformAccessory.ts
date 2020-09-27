@@ -17,7 +17,7 @@ export class HomebridgeEsp8266GarageAccessory {
   constructor(
     private readonly platform: HomebridgeEsp8266GaragePlatform,
     private readonly accessory: PlatformAccessory,
-    private readonly config: { host: string, port: number, name: string, serial: string },
+    private readonly config: { host: string; port: number; name: string; serial: string },
   ) {
 
     this.socket = new WebSocket('', {

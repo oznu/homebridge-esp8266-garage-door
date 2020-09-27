@@ -8,4 +8,4 @@ import { HomebridgeEsp8266GaragePlatform } from './platform';
  */
 export = (api: API) => {
   api.registerPlatform(PLATFORM_NAME, HomebridgeEsp8266GaragePlatform);
-}
+};
