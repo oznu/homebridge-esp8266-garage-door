@@ -1,4 +1,4 @@
-name: Build and Lint
+name: Homebridge Build and Lint
 
 on: [push, pull_request]
 
