@@ -6,6 +6,11 @@ An esp8266 powered garage door controller with HomeKit support powered by Homebr
 
 This project uses [PlatformIO](https://platformio.org/) to manage dependencies and build process. See https://platformio.org/platformio-ide for installation instructions.
 
+Setup:
+
+1. Create an `auth.h` file based on the the [`src/auth.h-template`](./src/auth.h-template) file and define a secure alphanumeric username and password.
+2. Review the GPIO pins defined in [`src/settings.h`](./src/settings.h) and adjust as required.
+
 Build:
 
 ```
@@ -31,6 +36,10 @@ pio device list
 ```
 
 ## Homebridge Plugin
+
+If you just want to install the plugin, search for and install [@oznu/homebridge-esp8266-garage-door](https://github.com/oznu/homebridge-esp8266-garage-door).
+
+### Development
 
 The Homebridge plugin is located in the [`./homebridge`](./homebridge) directory.
 
