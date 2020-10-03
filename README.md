@@ -8,7 +8,7 @@ This project uses [PlatformIO](https://platformio.org/) to manage dependencies a
 
 Setup:
 
-1. Create an `auth.h` file based on the the [`src/auth.h-template`](./src/auth.h-template) file and define a secure alphanumeric username and password.
+1. Create an `auth.h` file based on the [`src/auth.h-template`](./src/auth.h-template) file and define a secure alphanumeric username and password.
 2. Review the GPIO pins defined in [`src/settings.h`](./src/settings.h) and adjust as required.
 
 Build:
