@@ -37,7 +37,7 @@ pio device list
 
 ## Homebridge Plugin
 
-If you just want to install the plugin, search for and install [@oznu/homebridge-esp8266-garage-door](https://github.com/oznu/homebridge-esp8266-garage-door).
+If you just want to install the plugin, search for and install [@oznu/homebridge-esp8266-garage-door](https://www.npmjs.com/package/@oznu/homebridge-esp8266-garage-door).
 
 ### Development
 
