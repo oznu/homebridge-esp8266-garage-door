@@ -1,6 +1,6 @@
 /** Define off and on states for the relays **/
-#define OFF_STATE                     HIGH
-#define ON_STATE                      LOW
+#define OFF_STATE                     LOW
+#define ON_STATE                      HIGH
 
 /* GPIO Settings */
 #define OPEN_REED_SWITCH              15 // Wemos D1 Mini = D8
@@ -8,4 +8,4 @@
 
 #define OBSTRUCTION_DETECTED_SWITCH   14 // Wemos D1 Mini = D5
 
-#define CONTACT_RELAY                 16 // Wemos D1 Mini = D0
+#define CONTACT_RELAY                 5 // Wemos D1 Mini = D1

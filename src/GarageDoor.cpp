@@ -147,6 +147,24 @@ void GarageDoor::processIncomingRequest(String payload) {
       return;
     }
 
+    // if the door is already open, do not trigger the relay again
+    if (req["TargetDoorState"] == "OPEN" && openReedSwitch.isPressed()) {
+      this->currentDoorState = "OPEN";
+      this->targetDoorState = "OPEN";
+      Serial.println("Door already open");
+      this->broadcastSystemStatus();
+      return;
+    }
+
+    // if the door is already closed, do not trigger the relay again
+    if (req["TargetDoorState"] == "CLOSED" && closedReedSwitch.isPressed()) {
+      this->currentDoorState = "CLOSED";
+      this->targetDoorState = "CLOSED";
+      Serial.println("Door already closed");
+      this->broadcastSystemStatus();
+      return;
+    }
+
     if ( this->currentDoorState == "STOPPED" ) {
       if ( this->targetDoorState == "OPEN" ) {
         this->targetDoorState = "CLOSED";
@@ -156,13 +174,11 @@ void GarageDoor::processIncomingRequest(String payload) {
         this->currentDoorState = "OPENING";
       }
     }
-    else if (req["TargetDoorState"] == "OPEN")
-    {
+    else if (req["TargetDoorState"] == "OPEN") {
       this->targetDoorState = "OPEN";
       this->currentDoorState = "OPENING";
     }
-    else if (req["TargetDoorState"] == "CLOSED")
-    {
+    else if (req["TargetDoorState"] == "CLOSED") {
       this->targetDoorState = "CLOSED";
       this->currentDoorState = "CLOSING";
     }

@@ -65,10 +65,17 @@ void setup(void) {
   wm.setSaveConfigCallback(saveConfigCallback);
 
   // sets timeout until configuration portal gets turned off
-  wm.setTimeout(600);
+  wm.setConfigPortalTimeout(120);
+
+  // connect time out
+  wm.setConnectTimeout(1200);
+
+  // connect retry count
+  wm.setConnectRetries(30);
 
   // first parameter is name of access point, second is the password
-  if (!wm.autoConnect(hostname, "password")) {
+  if (!wm.autoConnect(hostname, AUTH_PASSWORD))
+  {
     Serial.println("Failed to connect and hit timeout");
     delay(3000);
 
