@@ -30,7 +30,14 @@ class GarageDoor {
 
     void processIncomingRequest(String payload);
     void triggerContactRelay(unsigned long contactTime);
-    void broadcastSystemStatus(); 
+    void broadcastSystemStatus();
+
+    // how long 
+    unsigned long operationTimeoutMs = 35000;
+
+  private:
+    unsigned long forceClose = 0;
+    unsigned long forceOpen = 0;
 };
 
 #endif

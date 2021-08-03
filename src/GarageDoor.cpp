@@ -93,6 +93,39 @@ void GarageDoor::loop () {
     this->broadcastSystemStatus();
     Serial.println("[OBSTRUCTION SWITCH] FALSE");
   }
+
+  // this is a "hack" to ensure the status eventually returns to "Closed" or "Open" even if the closed/open sensors are not reliable
+  unsigned long currentMillis = millis();
+
+  if (this->forceClose != 0 && currentMillis > this->forceClose && this->currentDoorState == "CLOSING") {
+    if (!openReedSwitch.isPressed()) {
+      this->forceClose = 0;
+      this->currentDoorState = "CLOSED";
+      Serial.println("Close timeout reached, forcing state to CLOSED.");
+      this->broadcastSystemStatus();
+    } else {
+      // the OPEN contact is still pressed, the door must still be fully open
+      this->forceClose = 0;
+      this->currentDoorState = "OPEN";
+      Serial.println("Close timeout reached, OPEN SWITCH is still pressed, forcing state to OPEN.");
+      this->broadcastSystemStatus();
+    }
+  }
+
+  if (this->forceOpen != 0 && currentMillis > this->forceOpen && this->currentDoorState == "OPENING") {
+    if (!closedReedSwitch.isPressed()) {
+      this->forceOpen = 0;
+      this->currentDoorState = "OPEN";
+      Serial.println("Open timeout reached, forcing state to OPEN.");
+      this->broadcastSystemStatus();
+    } else {
+      // the CLOSED contact is still pressed, the door must still be fully closed
+      this->forceOpen = 0;
+      this->currentDoorState = "CLOSED";
+      Serial.println("Open timeout reached, CLOSED SWITCH is still pressed, forcing state to CLOSED.");
+      this->broadcastSystemStatus();
+    }
+  }
 }
 
 void GarageDoor::webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length) {
@@ -169,18 +202,22 @@ void GarageDoor::processIncomingRequest(String payload) {
       if ( this->targetDoorState == "OPEN" ) {
         this->targetDoorState = "CLOSED";
         this->currentDoorState = "CLOSING";
+        this->forceClose = millis() + operationTimeoutMs;
       } else {
         this->targetDoorState = "OPEN";
         this->currentDoorState = "OPENING";
+        this->forceOpen = millis() + operationTimeoutMs;
       }
     }
     else if (req["TargetDoorState"] == "OPEN") {
       this->targetDoorState = "OPEN";
       this->currentDoorState = "OPENING";
+      this->forceOpen = millis() + operationTimeoutMs;
     }
     else if (req["TargetDoorState"] == "CLOSED") {
       this->targetDoorState = "CLOSED";
       this->currentDoorState = "CLOSING";
+      this->forceClose = millis() + operationTimeoutMs;
     }
 
     this->broadcastSystemStatus();
@@ -213,7 +250,8 @@ void GarageDoor::broadcastSystemStatus() {
 
   res["CurrentDoorState"] = this->currentDoorState;
   res["TargetDoorState"] = this->targetDoorState;
-  res["ObstructionDetected"] = this->obstructionDetected || false;
+  // res["ObstructionDetected"] = this->obstructionDetected || false;
+  res["ObstructionDetected"] = false;
 
   String payload;
   serializeJson(doc, payload);
